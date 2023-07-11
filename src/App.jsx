@@ -42,9 +42,18 @@ function App() {
 
 
   const guardarGasto = gasto =>{
-    gasto.id = generarId();
-    gasto.fecha = Date.now();
-    setGastos([...gastos, gasto ])
+    
+    if(gasto.id){
+      //actualizar
+      const gastosActualizados = gastos.map( gastoState => gastoState.id === gasto.id ? gasto : gastoState)
+      setGastos(gastosActualizados);
+    }else{
+      //Nuevo gasto
+      gasto.id = generarId();
+      gasto.fecha = Date.now();
+      setGastos([...gastos, gasto ])
+      setGastoEditar({})
+    }
 
     setAnimarModal(false)
         setTimeout(() => {
@@ -52,7 +61,11 @@ function App() {
         }, 500);
   }
 
+  const eliminarGasto = id =>{
+  const gastosActualizados = gastos.filter( gasto=> gasto.id !== id );
+  setGastos(gastosActualizados);
 
+  }
 
   return (
     <div className={modal ? 'fijar' : ''}>
@@ -71,6 +84,7 @@ function App() {
         <ListadoGastos
         gastos={gastos}
         setGastoEditar={setGastoEditar}
+        eliminarGasto={eliminarGasto}
         />
       </main>
 
@@ -90,6 +104,7 @@ function App() {
                 setAnimarModal={setAnimarModal}
                 guardarGasto={guardarGasto}
                 gastoEditar={gastoEditar}
+                setGastoEditar={setGastoEditar}
               />}
 
       
