@@ -111,7 +111,6 @@ export const Modal = ({
                      <option value="ocio"> Ocio </option>
                      <option value="salud"> Salud </option>
                      <option value="suscripciones"> Suscripciones </option>
-
                     </select>
                 </div>
 

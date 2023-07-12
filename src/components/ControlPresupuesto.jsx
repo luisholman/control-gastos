@@ -2,7 +2,13 @@ import { useState, useEffect } from "react"
 import { CircularProgressbar, buildStyles} from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css"
 
-export const ControlPresupuesto = ({ gastos, presupuesto }) => {
+export const ControlPresupuesto = ({ 
+    gastos,
+    setGastos,
+    presupuesto,
+    setPresupuesto,
+    setIsValidPresupuesto
+}) => {
 
     const [porcentaje, setPorcentaje]=useState (0)
 
@@ -30,27 +36,48 @@ export const ControlPresupuesto = ({ gastos, presupuesto }) => {
             currency: 'USD'
         })
     }
+
+    const handleResetApp = ()=>{
+        const resultado = confirm('Desear Borrar los datos de Presupuesto y Gastos');
+
+        if (resultado){
+            setGastos([])
+            setPresupuesto(0)
+            setIsValidPresupuesto(false)
+
+        }
+    }
+
     return (
 
         <div className="contenedor-presupuesto contenedor sombra dos-columnas">
             <div>
                 <CircularProgressbar
                 styles={buildStyles ({
-                    pathColor:'#3bf664',
-                    trailColor: '#f5f5f5'
+                    pathColor: porcentaje > 100 ? '#dc2626': '#3bf664',
+                    trailColor: '#f5f5f5',
+                    textColor: porcentaje > 100 ? '#dc2626': '#3bf664'
+                    
                 })}
                 value={porcentaje}
-                text={`${porcentaje}%`}
+                text={`${porcentaje}% Gastado`}
                 
                 />
             </div>
 
             <div className=" contenido-presupuesto">
+                <button 
+                className="reset-app"
+                type="button"
+                onClick={handleResetApp}
+                >
+                    Borrar Datos
+                </button>
                 <p>
                     <span>Presupuesto:</span> {formatearCantidad(presupuesto)}
                 </p>
 
-                <p>
+                <p className={`${disponible < 0 ? 'negativo' : '' }`}>
                     <span>Disponible:</span> {formatearCantidad(disponible)}
                 </p>
 
